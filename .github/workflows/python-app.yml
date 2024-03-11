@@ -1,39 +1,42 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
-name: Python application
+name: 定时发送邮件
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
+  #push:
+  #  branches: [ main ]
+  #pull_request:
+  #  branches: [ main ]
+  # 定时任务触发 北京时间21:30 执行 21-9=12
+  schedule:
+    - cron: '30 1 * * *'
+  watch:
+    types: started
+  # 手动触发
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    environment: 
+      name: hzPython
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
+      - name: Checkout codes
+        uses: actions/checkout@v3 # github marketplace 中提供的方案，@v3代表版本
+
+      - name: 设置执行环境的时区
+        uses: szenius/set-timezone@v1.0 # 设置执行环境的时区
+        with:
+          timezoneLinux: "Asia/Shanghai"
+
+      - name: 初始化Python
+        uses: actions/setup-python@v3 # github marketplace 中提供的方案，@v3代表版本
+        with:
+          python-version: 3.8 # 设置Python版本
+
+      - name: 开始
+        env: 
+          keys: ${{ secrets.KEYS }} 
+          ivs: ${{ secrets.IVS }}
+          passwd: ${{ secrets.PASSWORD }}
+        run: |
+          pip install pycryptodome 
+          python3 SendEmail.py
