@@ -39,4 +39,4 @@ jobs:
         #   passwd: ${{ secrets.PASSWORD }}
         run: |
           pip3 install --no-cache-dir -r requirements.txt 
-          python3 login.py
+          python3 main.py
