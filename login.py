@@ -11,7 +11,8 @@ def get_credentials_path():
     if cf.CREDENTIALS_PATH is not None:
         return cf.CREDENTIALS_PATH
     else:
-        home_path = os.path.expanduser("~")
+        # home_path = os.path.expanduser("~")
+        home_path = os.getcwd()
         path = os.path.join(home_path, '.imaotai', 'credentials')
         # 尝试创建目录
         try:
