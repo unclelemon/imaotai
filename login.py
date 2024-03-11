@@ -13,10 +13,10 @@ def get_credentials_path():
     else:
         # home_path = os.path.expanduser("~")
         home_path = os.getcwd()
-        path = os.path.join(home_path, '.imaotai', 'credentials')
+        path = os.path.join(home_path, 'imaotai', 'credentials')
         # 尝试创建目录
         try:
-            os.mkdir(os.path.join(home_path, '.imaotai'))
+            os.mkdir(os.path.join(home_path, 'imaotai'))
         except OSError:
             pass
         return path
