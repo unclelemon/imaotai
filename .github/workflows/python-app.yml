@@ -1,4 +1,4 @@
-name: 定时发送邮件
+name: 定时预约茅台
 
 on:
   #push:
